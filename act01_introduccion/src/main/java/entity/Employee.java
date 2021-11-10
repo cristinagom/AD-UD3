@@ -1,16 +1,18 @@
 package entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name="employees")
 public class Employee {
     @Id
     @GeneratedValue
     private long id;
     private String fName;
     private String lName;
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn (name="cardid")
+    private Card c;
 
     public Employee() {
     }
@@ -38,4 +40,13 @@ public class Employee {
     public void setlName(String lName) {
         this.lName = lName;
     }
+
+    public Card getCard() {
+        return c;
+    }
+
+    public void setCard(Card c) {
+        this.c = c;
+    }
+
 }
