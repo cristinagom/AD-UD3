@@ -1,4 +1,5 @@
 import entity.Card;
+import entity.Department;
 import entity.Employee;
 import entity.Task;
 
@@ -13,12 +14,18 @@ public class Main {
         e.setlName("López");
         Task t = new Task("Crear landing page", e);
         Card c = new Card("AAAAXXXX00000",e);
+        Department d1 = new Department("IT");
+        Department d2 = new Department("Finance");
         e.setCard(c);
+        e.addDepartment(d1);
+        e.addDepartment(d2);
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(t);
         em.persist(c);
+        em.persist(d1);
+        em.persist(d2);
         em.persist(e);
         em.getTransaction().commit();
         em.close();
