@@ -8,19 +8,19 @@ import java.util.List;
 @Table(name="departments")
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     @Column(name="iddepartment")
     private int id;
     private String name;
-   /* @ManyToMany
-    @JoinTable(name="employee_department", joinColumns = @JoinColumn(name="iddepartment"),
-    inverseJoinColumns = @JoinColumn(name="idemployee"))
+    @ManyToMany(mappedBy = "ldepartments")
     private List<Employee> lemployees;
 
-*/
     public Department(String name) {
         this.name = name;
-        //this.lemployees = new ArrayList<Employee>();
+        lemployees = new ArrayList<Employee>();
+    }
+
+    public Department() {
     }
 
     public int getId() {
@@ -34,8 +34,9 @@ public class Department {
     public void setName(String name) {
         this.name = name;
     }
-/*
+
     public void addEmployee(Employee e) {
         lemployees.add(e);
-    }*/
+        e.addDepartment(this);
+    }
 }

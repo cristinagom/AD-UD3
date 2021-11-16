@@ -1,5 +1,6 @@
 package entity;
 
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,56 +8,98 @@ import java.util.List;
 @Entity
 @Table(name="employees")
 public class Employee {
+
     @Id
-    @GeneratedValue
-    private long idemployee;
-    private String fName;
-    private String lName;
-    @OneToOne (cascade = CascadeType.ALL)
-    @JoinColumn (name="cardid")
-    private Card c;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="idemployee")
+    private int idEmployee;
+    @Column(name="firstname")
+    private String firstName;
+    @Column(name="lastname")
+    private String lastName;
+    @Column(name="contactnumber")
+    private String contactNumber;
+    @OneToOne()
+    @JoinColumn(name="idcard")
+    private Card card;
+
+    @OneToMany(mappedBy = "employee", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    private List<Task> ltasks;
+
     @ManyToMany
-    @JoinTable(name="employee_department", joinColumns = @JoinColumn(name="idemployee"),
-            inverseJoinColumns = @JoinColumn(name="iddepartment"))
+    @JoinTable(name = "emp_dep",joinColumns = @JoinColumn(name="idemployee"),
+    inverseJoinColumns = @JoinColumn(name="iddepartment"))
     private List<Department> ldepartments;
 
-    public Employee() {
+    public Employee(){
+
+    }
+    public Employee(String firstName, String lastName, String contactNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.contactNumber = contactNumber;
+        ltasks=new ArrayList<Task>();
         ldepartments = new ArrayList<Department>();
     }
 
-    public long getId() {
-        return idemployee;
+    public int getIdEmployee() {
+        return idEmployee;
     }
 
-
-    public String getfName() {
-        return fName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setfName(String fName) {
-        this.fName = fName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getlName() {
-        return lName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setlName(String lName) {
-        this.lName = lName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "idEmployee=" + idEmployee +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                '}';
     }
 
     public Card getCard() {
-        return c;
+        return card;
     }
 
     public void setCard(Card c) {
-        this.c = c;
+        this.card = c;
     }
 
+    public void addTask(Task t) {
+        ltasks.add(t);
+        t.setEmployee(this);
+    }
+
+    public void removeTask(Task t) {
+        ltasks.remove(t);
+        t.setEmployee(null);
+    }
 
     public void addDepartment(Department d) {
         ldepartments.add(d);
+        d.addEmployee(this);
     }
-
-
 }

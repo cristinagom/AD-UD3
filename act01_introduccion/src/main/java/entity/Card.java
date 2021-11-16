@@ -6,20 +6,33 @@ import javax.persistence.*;
 @Table(name="cards")
 public class Card {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="idcard")
     private int id;
+    @Column(nullable = false)
     private String code;
-    @OneToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name="employeeid")
-    private Employee emp;
+    @Transient
+    private TypeCard type;
+    @OneToOne
+    @JoinColumn(name="idemployee")
+    private Employee employee;
 
-    public Card(String code, Employee e) {
+    public Card(String code, TypeCard type, Employee e) {
         this.code = code;
-        this.emp = e;
+        this.type = type;
+        this.employee = e;
+    }
+
+    public Card() {
+
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCode() {
@@ -30,11 +43,19 @@ public class Card {
         this.code = code;
     }
 
-    public Employee getEmp() {
-        return emp;
+    public TypeCard getType() {
+        return type;
     }
 
-    public void setEmp(Employee emp) {
-        this.emp = emp;
+    public void setType(TypeCard type) {
+        this.type = type;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }
